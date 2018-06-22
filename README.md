@@ -1,6 +1,8 @@
 # star-wars-planets
 Web Component using Custom Element, Shadow DOM, fetch, async/await, and the Star Wars API
 
+Github Pages Demo at https://richard-flosi.github.io/star-wars-planets/index.html
+
 ## Hackathon 2018
 
 ### Project Name:
