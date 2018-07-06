@@ -1,6 +1,51 @@
 <html>
 
 <head>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <style>
+    @font-face {
+      font-family: StarWars;
+      src: url("star-wars.ttf") format("truetype");
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      max-width: 960px;
+      margin: auto;
+    }
+  </style>
+  <!-- Polyfills only needed for Firefox and Edge. -->
+  <script src="https://unpkg.com/@webcomponents/webcomponentsjs@next/webcomponents-loader.js"></script>
+  <script type="module">
+    import 'https://unpkg.com/@material/mwc-button@latest/mwc-button.js?module';
+  </script>
+  <script>
+    customElements.define("star-wars-text", class extends HTMLElement {
+      constructor() {
+        super();
+        this.attachShadow({ mode: "open" });
+      }
+      async connectedCallback() {
+        this.render();
+      }
+      render() {
+        this.shadowRoot.innerHTML = `
+          <style>
+            #text {
+              font-family: StarWars;
+            }
+          </style>
+          <slot id="text">Star Wars Planets</slot>
+        `;
+      }
+    });
+  </script>
   <script>
     customElements.define("star-wars-planets", class extends HTMLElement {
       constructor() {
@@ -49,40 +94,43 @@
       }
       renderPrevious() {
         if (this.planets.previous) {
-          return `<div id="previous">Previous</div>`;
+          return `<mwc-button id="previous" label="Previous" raised ripple></mwc-button>`;
         } else {
-          return `<div>No previous planets.</div>`;
+          return `<mwc-button label="Previous" disabled></mwc-button>`;
         }
       }
       renderNext() {
         if (this.planets.next) {
-          return `<div id="next">Next</div>`;
+          return `<mwc-button id="next" label="Next" raised ripple></mwc-button>`;
         } else {
-          return `<div>No more planets.</div>`;
+          return `<mwc-button label="Next" disabled></mwc-button>`;
         }
       }
       render() {
         if (this.loading) {
-          this.shadowRoot.innerHTML = `Loading...`;
+          this.shadowRoot.innerHTML = `
+            <h1 style="text-align: center; margin-top: 25%;">
+              <star-wars-text>Loading...</star-wars-text>
+            </h1>
+          `;
         } else {
           this.shadowRoot.innerHTML = `
           <span>
-            <h3><slot name="title">Star Wars Planets</slot></h3>
-            <div>Count: ${this.planets.count}</div>
-            ${this.renderPrevious()}
-            ${this.renderNext()}
-            <table>
+            <h1 style="text-align: center;"><star-wars-text><slot name="title">Planets</slot></star-wars-text></h1>
+            <div style="display: flex; align-items: center;">
+              <span style="flex-shrink: 1;">${this.renderPrevious()}</span>
+              <span style="flex-grow: 1; text-align: center;"><star-wars-text>Count: ${this.planets.count}</star-wars-text></span>
+              <span style="flex-shrink: 1;">${this.renderNext()}</span>
+            </div>
+            <br />
+            <table align="center" cellspacing="20">
               <tr>
-                <th>Name</th>
-                <th>Terrain</th>
-                <th>Population</th>
-                <th>Climate</th>
-                <th>Diameter</th>
-                <th>Gravity</th>
-                <th>Orbital Period</th>
-                <th>Rotation Period</th>
-                <th>Surface Water</th>
-                <th>URL</th>
+                <th align="left"><star-wars-text>Name</star-wars-text></th>
+                <th align="left"><star-wars-text>Terrain</star-wars-text></th>
+                <th align="left"><star-wars-text>Population</star-wars-text></th>
+                <th align="left"><star-wars-text>Climate</star-wars-text></th>
+                <th align="left"><star-wars-text>Diameter</star-wars-text></th>
+                <th align="left"><star-wars-text>Gravity</star-wars-text></th>
               </tr>
               ${this.planets.results.map((planet) => {
               return `
@@ -93,10 +141,6 @@
             <td>${planet.climate}</td>
             <td>${planet.diameter}</td>
             <td>${planet.gravity}</td>
-            <td>${planet.orbital_period}</td>
-            <td>${planet.rotation_period}</td>
-            <td>${planet.surface_water}</td>
-            <td>${planet.url}</td>
           </tr>
               `;
             }).join("")}
@@ -111,7 +155,7 @@
 
 <body>
   <star-wars-planets>
-    <span slot="title">My Custom Star Wars</span>
+    <span slot="title">Star Wars Planets</span>
   </star-wars-planets>
 </body>
 
