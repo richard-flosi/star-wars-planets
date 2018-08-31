@@ -8,9 +8,6 @@ Github Pages Demo at https://richard-flosi.github.io/star-wars-planets/index.htm
 ### Project Name:
 Web Components
 
-### Team Name:
-Web Bros
-
 ### Team Members:
 * Richard Flosi
 * Erik Harper
